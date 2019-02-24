@@ -12,6 +12,11 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  email: {
+    type: String,
+    required: true
+  },
+
   // In case we need to distinguish types of users in the future
   isAdmin: {
     type: Boolean,
