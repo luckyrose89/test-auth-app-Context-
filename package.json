@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "avidrutham <divyamathur89@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
@@ -21,5 +21,6 @@
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-router-dom": "^4.3.1"
-  }
+  },
+  "repository": "https://github.com/luckyrose89/test-auth-app-Context-.git"
 }
