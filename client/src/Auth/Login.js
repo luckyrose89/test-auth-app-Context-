@@ -5,7 +5,8 @@ class LoginForm extends Component {
     super();
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      email: ""
     };
   }
 
@@ -19,7 +20,8 @@ class LoginForm extends Component {
   clearInputs = () => {
     this.setState({
       username: "",
-      password: ""
+      password: "",
+      email: ""
     });
   };
 
@@ -47,6 +49,13 @@ class LoginForm extends Component {
             name="password"
             type="password"
             placeholder="password"
+          />
+          <input
+            onChange={this.handleChange}
+            value={this.state.email}
+            name="email"
+            type="email"
+            placeholder="email"
           />
           <button type="submit">Submit</button>
         </form>

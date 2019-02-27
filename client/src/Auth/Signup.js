@@ -1,11 +1,13 @@
 import React, { Component } from "react";
+import { withContext } from "../AppContext";
 
 class Signup extends Component {
   constructor() {
     super();
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      email: ""
     };
   }
 
@@ -19,13 +21,14 @@ class Signup extends Component {
   clearInputs = () => {
     this.setState({
       username: "",
-      password: ""
+      password: "",
+      email: ""
     });
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    alert(JSON.stringify(this.state));
+    this.props.signup(this.state).then(() => this.props.history.push("/todos"));
     this.clearInputs();
   };
 
@@ -48,6 +51,13 @@ class Signup extends Component {
             type="password"
             placeholder="Password"
           />
+          <input
+            onChange={this.handleChange}
+            value={this.state.email}
+            name="email"
+            type="email"
+            placeholder="email"
+          />
           <button type="submit">Create Account</button>
         </form>
       </div>
@@ -55,4 +65,4 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+export default withContext(Signup);

@@ -7,7 +7,9 @@ export class AppContextProvider extends Component {
   constructor() {
     super();
     this.state = {
-      todos: []
+      todos: [],
+      user: JSON.parse(localStorage.getItem("user")) || {},
+      token: localStorage.getItem("token") || ""
     };
   }
 
@@ -16,43 +18,65 @@ export class AppContextProvider extends Component {
   }
 
   getTodos = () => {
-    return axios.get("/api/todo").then(response => {
+    return axios.get("http://localhost:5000/api/todo").then(response => {
       this.setState({ todos: response.data });
       return response;
     });
   };
 
   addTodo = newTodo => {
-    return axios.post("/api/todo/", newTodo).then(response => {
-      this.setState(prevState => {
-        return { todos: [...prevState.todos, response.data] };
+    return axios
+      .post("http://localhost:5000/api/todo/", newTodo)
+      .then(response => {
+        this.setState(prevState => {
+          return { todos: [...prevState.todos, response.data] };
+        });
+        return response;
       });
-      return response;
-    });
   };
 
   editTodo = (todoId, todo) => {
-    return axios.put(`/api/todo/${todoId}`, todo).then(response => {
-      this.setState(prevState => {
-        const updatedTodos = prevState.todos.map(todo => {
-          return todo._id === response.data._id ? response.data : todo;
+    return axios
+      .put(`http://localhost:5000/api/todo/${todoId}`, todo)
+      .then(response => {
+        this.setState(prevState => {
+          const updatedTodos = prevState.todos.map(todo => {
+            return todo._id === response.data._id ? response.data : todo;
+          });
+          return { todos: updatedTodos };
         });
-        return { todos: updatedTodos };
+        return response;
       });
-      return response;
-    });
   };
 
   deleteTodo = todoId => {
-    return axios.delete(`/api/todo/${todoId}`).then(response => {
-      this.setState(prevState => {
-        const updatedTodos = prevState.todos.filter(todo => {
-          return todo._id !== todoId;
+    return axios
+      .delete(`http://localhost:5000/api/todo/${todoId}`)
+      .then(response => {
+        this.setState(prevState => {
+          const updatedTodos = prevState.todos.filter(todo => {
+            return todo._id !== todoId;
+          });
+          return { todos: updatedTodos };
         });
-        return { todos: updatedTodos };
+        return response;
       });
-      return response;
-    });
+  };
+
+  // User Methods for signup & login
+  signup = userInfo => {
+    return axios
+      .post("http://localhost:5000/auth/signup", userInfo)
+      .then(response => {
+        const { user, token } = response.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        this.setState({
+          user,
+          token
+        });
+        return response;
+      });
   };
 
   render() {
@@ -63,6 +87,7 @@ export class AppContextProvider extends Component {
           addTodo: this.addTodo,
           editTodo: this.editTodo,
           deleteTodo: this.deleteTodo,
+          signup: this.signup,
           ...this.state
         }}
       >
